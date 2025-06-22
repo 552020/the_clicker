@@ -88,6 +88,18 @@ Let’s keep “The Clicker” for now as a working title.
 - [ ] Create CLI interaction script (Geth or Hardhat)
 - [ ] Document interaction flow
 
+Scaffold a minimal Solidity contract with click() logic
+
+Configure Hardhat project with testnet deployment script
+
+Deploy to Sepolia or Base Goerli
+
+Write CLI script to trigger clicks (using Geth or Hardhat console)
+
+Verify contract interaction by observing state changes
+
+Add README instructions for local testing and CLI use
+
 ---
 
 _This plan is a living document and will be extended as development progresses._
