@@ -3,7 +3,7 @@ import { ethers } from "hardhat";
 import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers";
 
 describe("TheClicker", function () {
-  let clicker: any;
+  let deployedClickerContract: any;
   let user1: SignerWithAddress;
   let user2: SignerWithAddress;
   let user3: SignerWithAddress;
@@ -12,116 +12,126 @@ describe("TheClicker", function () {
   //   let user3: any;
 
   beforeEach(async function () {
-    // Get signers
+    // Get signers (skip the first one which is typically the deployer)
     [, user1, user2, user3] = await ethers.getSigners();
 
-    // Deploy contract
-    const TheClicker = await ethers.getContractFactory("TheClicker");
-    clicker = await TheClicker.deploy();
-    await clicker.deployed();
+    // Create a contract factory - this is like a "blueprint" for deploying contracts
+    // It contains the compiled bytecode, ABI, and deployment logic
+    const ClickerContractFactory = await ethers.getContractFactory("TheClicker");
+
+    // Deploy a fresh contract instance from the factory
+    // This creates a new contract on the blockchain that we can interact with
+    deployedClickerContract = await ClickerContractFactory.deploy();
+    await deployedClickerContract.deployed();
   });
 
   describe("Deployment", function () {
     it("Should deploy successfully", async function () {
-      expect(clicker.address).to.not.equal(ethers.ZeroAddress);
+      expect(deployedClickerContract.address).to.not.equal(ethers.ZeroAddress);
     });
 
     it("Should initialize with zero total clicks", async function () {
-      expect(await clicker.totalClicks()).to.equal(0);
+      expect(await deployedClickerContract.totalClicks()).to.equal(0);
     });
 
     it("Should initialize with zero user clicks for any address", async function () {
-      expect(await clicker.userClicks(user1.address)).to.equal(0);
-      expect(await clicker.userClicks(user2.address)).to.equal(0);
+      expect(await deployedClickerContract.userClicks(user1.address)).to.equal(0);
+      expect(await deployedClickerContract.userClicks(user2.address)).to.equal(0);
     });
   });
 
   describe("click() function", function () {
     it("Should increment total clicks", async function () {
-      await clicker.connect(user1).click();
-      expect(await clicker.totalClicks()).to.equal(1);
+      await deployedClickerContract.connect(user1).click();
+      expect(await deployedClickerContract.totalClicks()).to.equal(1);
 
-      await clicker.connect(user2).click();
-      expect(await clicker.totalClicks()).to.equal(2);
+      await deployedClickerContract.connect(user2).click();
+      expect(await deployedClickerContract.totalClicks()).to.equal(2);
     });
 
     it("Should increment user clicks for the caller", async function () {
-      await clicker.connect(user1).click();
-      expect(await clicker.userClicks(user1.address)).to.equal(1);
+      await deployedClickerContract.connect(user1).click();
+      expect(await deployedClickerContract.userClicks(user1.address)).to.equal(1);
 
-      await clicker.connect(user1).click();
-      expect(await clicker.userClicks(user1.address)).to.equal(2);
+      await deployedClickerContract.connect(user1).click();
+      expect(await deployedClickerContract.userClicks(user1.address)).to.equal(2);
     });
 
     it("Should not affect other users' click counts", async function () {
-      await clicker.connect(user1).click();
-      await clicker.connect(user1).click();
+      await deployedClickerContract.connect(user1).click();
+      await deployedClickerContract.connect(user1).click();
 
-      expect(await clicker.userClicks(user1.address)).to.equal(2);
-      expect(await clicker.userClicks(user2.address)).to.equal(0);
+      expect(await deployedClickerContract.userClicks(user1.address)).to.equal(2);
+      expect(await deployedClickerContract.userClicks(user2.address)).to.equal(0);
     });
 
     it("Should work with multiple users", async function () {
-      await clicker.connect(user1).click();
-      await clicker.connect(user2).click();
-      await clicker.connect(user3).click();
+      await deployedClickerContract.connect(user1).click();
+      await deployedClickerContract.connect(user2).click();
+      await deployedClickerContract.connect(user3).click();
 
-      expect(await clicker.totalClicks()).to.equal(3);
-      expect(await clicker.userClicks(user1.address)).to.equal(1);
-      expect(await clicker.userClicks(user2.address)).to.equal(1);
-      expect(await clicker.userClicks(user3.address)).to.equal(1);
+      expect(await deployedClickerContract.totalClicks()).to.equal(3);
+      expect(await deployedClickerContract.userClicks(user1.address)).to.equal(1);
+      expect(await deployedClickerContract.userClicks(user2.address)).to.equal(1);
+      expect(await deployedClickerContract.userClicks(user3.address)).to.equal(1);
     });
 
     it("Should emit ClickEvent with correct parameters", async function () {
-      await expect(clicker.connect(user1).click()).to.emit(clicker, "ClickEvent").withArgs(user1.address, 1, 1);
+      await expect(deployedClickerContract.connect(user1).click())
+        .to.emit(deployedClickerContract, "ClickEvent")
+        .withArgs(user1.address, 1, 1);
 
-      await expect(clicker.connect(user1).click()).to.emit(clicker, "ClickEvent").withArgs(user1.address, 2, 2);
+      await expect(deployedClickerContract.connect(user1).click())
+        .to.emit(deployedClickerContract, "ClickEvent")
+        .withArgs(user1.address, 2, 2);
 
-      await expect(clicker.connect(user2).click()).to.emit(clicker, "ClickEvent").withArgs(user2.address, 3, 1);
+      await expect(deployedClickerContract.connect(user2).click())
+        .to.emit(deployedClickerContract, "ClickEvent")
+        .withArgs(user2.address, 3, 1);
     });
   });
 
   describe("getUserClicks() function", function () {
     it("Should return correct user click count", async function () {
-      await clicker.connect(user1).click();
-      await clicker.connect(user1).click();
-      await clicker.connect(user2).click();
+      await deployedClickerContract.connect(user1).click();
+      await deployedClickerContract.connect(user1).click();
+      await deployedClickerContract.connect(user2).click();
 
-      expect(await clicker.getUserClicks(user1.address)).to.equal(2);
-      expect(await clicker.getUserClicks(user2.address)).to.equal(1);
+      expect(await deployedClickerContract.getUserClicks(user1.address)).to.equal(2);
+      expect(await deployedClickerContract.getUserClicks(user2.address)).to.equal(1);
     });
 
     it("Should return zero for users who haven't clicked", async function () {
-      expect(await clicker.getUserClicks(user1.address)).to.equal(0);
-      expect(await clicker.getUserClicks(user2.address)).to.equal(0);
+      expect(await deployedClickerContract.getUserClicks(user1.address)).to.equal(0);
+      expect(await deployedClickerContract.getUserClicks(user2.address)).to.equal(0);
     });
 
     it("Should work with any address", async function () {
       const randomAddress = ethers.Wallet.createRandom().address;
-      expect(await clicker.getUserClicks(randomAddress)).to.equal(0);
+      expect(await deployedClickerContract.getUserClicks(randomAddress)).to.equal(0);
     });
   });
 
   describe("Hybrid approach validation", function () {
     it("Should maintain on-chain state correctly", async function () {
       // User1 clicks multiple times
-      await clicker.connect(user1).click();
-      await clicker.connect(user1).click();
-      await clicker.connect(user1).click();
+      await deployedClickerContract.connect(user1).click();
+      await deployedClickerContract.connect(user1).click();
+      await deployedClickerContract.connect(user1).click();
 
       // User2 clicks once
-      await clicker.connect(user2).click();
+      await deployedClickerContract.connect(user2).click();
 
       // Verify on-chain state
-      expect(await clicker.totalClicks()).to.equal(4);
-      expect(await clicker.userClicks(user1.address)).to.equal(3);
-      expect(await clicker.userClicks(user2.address)).to.equal(1);
+      expect(await deployedClickerContract.totalClicks()).to.equal(4);
+      expect(await deployedClickerContract.userClicks(user1.address)).to.equal(3);
+      expect(await deployedClickerContract.userClicks(user2.address)).to.equal(1);
     });
 
     it("Should emit events for off-chain indexing", async function () {
-      const tx1 = await clicker.connect(user1).click();
-      const tx2 = await clicker.connect(user1).click();
-      const tx3 = await clicker.connect(user2).click();
+      const tx1 = await deployedClickerContract.connect(user1).click();
+      const tx2 = await deployedClickerContract.connect(user1).click();
+      const tx3 = await deployedClickerContract.connect(user2).click();
 
       // Get transaction receipts to verify events
       const receipt1 = await tx1.wait();
@@ -145,23 +155,23 @@ describe("TheClicker", function () {
 
     it("Should allow off-chain ranking reconstruction", async function () {
       // Simulate multiple users clicking
-      await clicker.connect(user1).click();
-      await clicker.connect(user1).click();
-      await clicker.connect(user2).click();
-      await clicker.connect(user3).click();
-      await clicker.connect(user1).click();
+      await deployedClickerContract.connect(user1).click();
+      await deployedClickerContract.connect(user1).click();
+      await deployedClickerContract.connect(user2).click();
+      await deployedClickerContract.connect(user3).click();
+      await deployedClickerContract.connect(user1).click();
 
       // Verify final state
-      expect(await clicker.totalClicks()).to.equal(5);
-      expect(await clicker.userClicks(user1.address)).to.equal(3);
-      expect(await clicker.userClicks(user2.address)).to.equal(1);
-      expect(await clicker.userClicks(user3.address)).to.equal(1);
+      expect(await deployedClickerContract.totalClicks()).to.equal(5);
+      expect(await deployedClickerContract.userClicks(user1.address)).to.equal(3);
+      expect(await deployedClickerContract.userClicks(user2.address)).to.equal(1);
+      expect(await deployedClickerContract.userClicks(user3.address)).to.equal(1);
     });
   });
 
   describe("Gas efficiency", function () {
     it("Should have reasonable gas costs for click operations", async function () {
-      const tx = await clicker.connect(user1).click();
+      const tx = await deployedClickerContract.connect(user1).click();
       const receipt = await tx.wait();
 
       // Gas should be reasonable (less than 100k for simple operation)
@@ -174,23 +184,23 @@ describe("TheClicker", function () {
       const manyClicks = 10;
 
       for (let i = 0; i < manyClicks; i++) {
-        await clicker.connect(user1).click();
+        await deployedClickerContract.connect(user1).click();
       }
 
-      expect(await clicker.totalClicks()).to.equal(manyClicks);
-      expect(await clicker.userClicks(user1.address)).to.equal(manyClicks);
+      expect(await deployedClickerContract.totalClicks()).to.equal(manyClicks);
+      expect(await deployedClickerContract.userClicks(user1.address)).to.equal(manyClicks);
     });
 
     it("Should handle many different users", async function () {
       const users = [user1, user2, user3];
 
       for (let i = 0; i < users.length; i++) {
-        await clicker.connect(users[i]).click();
+        await deployedClickerContract.connect(users[i]).click();
       }
 
-      expect(await clicker.totalClicks()).to.equal(users.length);
+      expect(await deployedClickerContract.totalClicks()).to.equal(users.length);
       for (let i = 0; i < users.length; i++) {
-        expect(await clicker.userClicks(users[i].address)).to.equal(1);
+        expect(await deployedClickerContract.userClicks(users[i].address)).to.equal(1);
       }
     });
   });
