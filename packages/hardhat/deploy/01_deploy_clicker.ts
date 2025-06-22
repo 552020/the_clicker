@@ -3,7 +3,8 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { Contract } from "ethers";
 
 /**
- * Deploys a contract named "Clicker" for The Clicker DApp
+ * Deploys a contract named "TheClicker" for The Clicker DApp
+ * Uses hybrid approach: on-chain storage + events for off-chain indexing
  *
  * @param hre HardhatRuntimeEnvironment object.
  */
@@ -21,9 +22,9 @@ const deployClickerContract: DeployFunction = async function (hre: HardhatRuntim
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("Clicker", {
+  await deploy("TheClicker", {
     from: deployer,
-    // Contract constructor arguments (none needed for Clicker)
+    // Contract constructor arguments (none needed for TheClicker)
     args: [],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
@@ -32,14 +33,15 @@ const deployClickerContract: DeployFunction = async function (hre: HardhatRuntim
   });
 
   // Get the deployed contract to interact with it after deploying.
-  const clickerContract = await hre.ethers.getContract<Contract>("Clicker", deployer);
-  console.log("🎯 Clicker contract deployed!");
-  console.log("📊 Initial total count:", await clickerContract.totalCount());
-  console.log("👤 Deployer's click count:", await clickerContract.userCounts(deployer));
+  const clickerContract = await hre.ethers.getContract<Contract>("TheClicker", deployer);
+  console.log("🎯 TheClicker contract deployed successfully!");
+  console.log("📊 Initial total clicks:", await clickerContract.totalClicks());
+  console.log("👤 Deployer's clicks:", await clickerContract.userClicks(deployer));
+  console.log("📝 Contract supports events for off-chain indexing (Phase 5)");
 };
 
 export default deployClickerContract;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
-// e.g. yarn deploy --tags Clicker
-deployClickerContract.tags = ["Clicker"];
+// e.g. yarn deploy --tags TheClicker
+deployClickerContract.tags = ["TheClicker"];

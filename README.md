@@ -152,6 +152,7 @@ npx hardhat console --network localhost
 - [NatSpec Format](https://docs.soliditylang.org/en/latest/natspec-format.html) - Smart contract documentation standard
 - [Hardhat Documentation](https://hardhat.org/docs) - Development framework docs
 - [Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2) - Framework repository
+- [Storage vs Logs Guide](docs/storage-vs-logs.md) - On-chain storage vs emit logs for tracking and rankings
 
 ### Ethereum Resources
 

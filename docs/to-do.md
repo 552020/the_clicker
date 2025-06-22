@@ -4,27 +4,31 @@
 
 ### Smart Contract Development
 
-- [ ] **Write basic Solidity contract** (`YourContract.sol`)
-  - [ ] Add `uint256 public totalCount` variable
-  - [ ] Add `mapping(address => uint256) public userCounts` mapping
-  - [ ] Implement `function click() external` function
-  - [ ] Add events for click tracking (optional but recommended)
+- [x] **Write basic Solidity contract** (`TheClicker.sol`)
+  - [x] Add `uint256 public totalClicks` variable
+  - [x] Add `mapping(address => uint256) public userClicks` mapping
+  - [x] Implement `function click() external` function
+  - [x] Add `function getUserClicks(address user)` view function
+  - [x] Follow proper Solidity naming conventions (PascalCase contract, camelCase functions/variables)
+  - [x] **Implement hybrid approach (Option C)** - Add events for off-chain indexing
+  - [x] Add `ClickEvent` event with indexed clicker address
+  - [x] Emit events in `click()` function for future analytics
 - [ ] **Test contract locally**
   - [ ] Write unit tests in `packages/hardhat/test/`
   - [ ] Test `click()` function increments both counters
   - [ ] Test user-specific counting works correctly
+  - [ ] Test event emission works properly
   - [ ] Run `yarn test` to verify all tests pass
 
 ### Local Development Setup
 
-- [ ] **Configure Hardhat project**
-  - [ ] Update `packages/hardhat/hardhat.config.ts` for testnet deployment
+- [x] **Configure Hardhat project**
+  - [x] Create deployment script `01_deploy_clicker.ts`
+  - [x] Update deployment script for TheClicker contract
+  - [x] Set up proper contract deployment logic
+- [ ] **Configure testnet deployment**
   - [ ] Add Sepolia/Base Goerli network configuration
   - [ ] Set up environment variables for private keys
-- [ ] **Create deployment script**
-  - [ ] Modify `packages/hardhat/deploy/00_deploy_your_contract.ts`
-  - [ ] Add proper contract deployment logic
-  - [ ] Add deployment verification
 
 ### Local Testing & Interaction
 
@@ -78,8 +82,8 @@
 
 - [ ] **Create click interface**
   - [ ] Add "Click" button component
-  - [ ] Display current `totalCount`
-  - [ ] Display user's `userCounts[address]`
+  - [ ] Display current `totalClicks`
+  - [ ] Display user's `userClicks[address]`
 - [ ] **Add transaction feedback**
   - [ ] Show transaction status (pending, success, error)
   - [ ] Add loading states during transactions
@@ -181,13 +185,13 @@
 
 ## Immediate Next Steps (Priority Order) 🚀
 
-1. **Write and test basic smart contract** - Start with `YourContract.sol`
-2. **Set up local development environment** - Configure Hardhat and test locally
+1. **Test the smart contract locally** - Write and run unit tests
+2. **Deploy and test locally** - Use Hardhat local network
 3. **Deploy to testnet** - Get contract live on Sepolia
-4. **Test CLI interaction** - Verify contract works via command line
+4. **Test CLI interaction** - Verify it works via command line
 5. **Create basic frontend** - Build simple click interface
 
 ---
 
 _Last updated: [Current Date]_
-_Status: Phase 1 in progress_
+_Status: Phase 1 - Smart contract completed, testing in progress_
