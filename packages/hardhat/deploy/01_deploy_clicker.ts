@@ -37,7 +37,6 @@ const deployClickerContract: DeployFunction = async function (hre: HardhatRuntim
   console.log("🎯 TheClicker contract deployed successfully!");
   console.log("📊 Initial total clicks:", await clickerContract.totalClicks());
   console.log("👤 Deployer's clicks:", await clickerContract.userClicks(deployer));
-  console.log("📝 Contract supports events for off-chain indexing (Phase 5)");
 };
 
 export default deployClickerContract;

@@ -48,13 +48,14 @@
 
 ### Local Testing & Interaction
 
-- [ ] **Start local blockchain**
-  - [ ] Run `yarn chain` to start local network
-  - [ ] Run `yarn deploy` to deploy contract locally
-- [ ] **Test CLI interaction**
-  - [ ] Use Hardhat console: `npx hardhat console --network localhost`
-  - [ ] Test `click()` function calls
-  - [ ] Verify state changes in contract
+- [x] **Start local blockchain**
+  - [x] Run `yarn chain` to start local network
+  - [x] Run `yarn deploy` to deploy contract locally
+- [x] **Test CLI interaction**
+  - [x] Use Hardhat console: `npx hardhat console --network localhost`
+  - [x] Test `click()` function calls
+  - [x] Verify state changes in contract
+  - [x] **Complete manual testing workflow** - All steps from [Hardhat Manual Testing Guide](docs/hardhat-manual-testing.md) verified and working
 - [ ] **Test via debug UI**
   - [ ] Run `yarn start` to start frontend
   - [ ] Navigate to `http://localhost:3000/debug`
