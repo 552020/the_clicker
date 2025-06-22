@@ -20,6 +20,25 @@
   - [ ] Test event emission works properly
   - [ ] Run `yarn test` to verify all tests pass
 
+### Hybrid Implementation Testing
+
+- [ ] **Local testing with Hardhat**
+  - [ ] Deploy contract to local network
+  - [ ] Call `click()` from different addresses
+  - [ ] Verify `userClicks` mapping updates correctly
+  - [ ] Check emitted `ClickEvent` logs
+  - [ ] Test `getUserClicks()` function with different addresses
+- [ ] **Testnet deployment**
+  - [ ] Deploy to Sepolia or Base Goerli testnet
+  - [ ] Verify contract on Etherscan
+  - [ ] Test `click()` function on live testnet
+  - [ ] Verify events are emitted correctly
+- [ ] **Proof-of-concept off-chain ranking**
+  - [ ] Write small script to read events and build ranking
+  - [ ] Or create basic The Graph subgraph
+  - [ ] Demonstrate off-chain ranking from emitted logs
+  - [ ] Compare with on-chain `userClicks` data for verification
+
 ### Local Development Setup
 
 - [x] **Configure Hardhat project**
@@ -185,11 +204,12 @@
 
 ## Immediate Next Steps (Priority Order) 🚀
 
-1. **Test the smart contract locally** - Write and run unit tests
-2. **Deploy and test locally** - Use Hardhat local network
-3. **Deploy to testnet** - Get contract live on Sepolia
-4. **Test CLI interaction** - Verify it works via command line
-5. **Create basic frontend** - Build simple click interface
+1. **Test the hybrid contract locally** - Write and run unit tests for events
+2. **Deploy and test locally** - Use Hardhat local network to verify functionality
+3. **Deploy to testnet** - Get contract live on Sepolia with events
+4. **Create proof-of-concept ranking** - Build off-chain ranking from events
+5. **Test CLI interaction** - Verify it works via command line
+6. **Create basic frontend** - Build simple click interface
 
 ---
 
