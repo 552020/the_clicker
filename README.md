@@ -49,11 +49,15 @@ We're currently building the foundation - a basic smart contract that tracks glo
    yarn chain
    ```
 
+   > **Note**: This resolves to `hardhat node --network hardhat --no-deploy`. If you're using Hardhat without Scaffold-ETH, the equivalent command would be `npx hardhat node`.
+
 3. **Deploy contracts locally**
 
    ```bash
    yarn deploy
    ```
+
+   > **Note**: This resolves to `ts-node scripts/runHardhatDeployWithPK.ts`. If you're using Hardhat without Scaffold-ETH, the equivalent command would be `npx hardhat run scripts/deploy.ts --network localhost`.
 
 4. **Start frontend**
 

@@ -1,3 +1,27 @@
+# TheClicker Test Suite — Insights & Migration Notes
+
+## Recent Debugging & Migration Summary
+
+### 1. **Deployment Pattern Update (Ethers.js v6)**
+
+- Migrated from the legacy `.deployed()` method (ethers v5) to the modern `waitForDeployment()` method (ethers v6).
+- This change ensures compatibility with the latest Hardhat and ethers.js versions, and matches the pattern used in the working `YourContract` test.
+
+### 2. **Event & Gas API Changes**
+
+- Updated event log assertions to use `receipt.logs.length` instead of `receipt.events?.length` (which is now often undefined in ethers v6 receipts).
+- Updated gas usage assertions to use `BigInt` comparison (`receipt.gasUsed < 100000n`) instead of `.toNumber()` (which is not available in ethers v6).
+
+### 3. **Test Suite Improvements**
+
+- All tests now pass with the new deployment and assertion patterns.
+- The test suite covers deployment, click logic, event emission, gas efficiency, edge cases, and hybrid on-chain/off-chain analytics.
+- TheClicker test is now robust, future-proof, and compatible with the latest Hardhat/ethers.js ecosystem.
+
+---
+
+# Original Test Documentation
+
 # TheClicker Test File - Keyword Reference Guide
 
 This document explains all the keywords, methods, and concepts used in `TheClicker.ts` test file, organized by their source library.

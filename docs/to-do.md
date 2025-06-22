@@ -13,12 +13,9 @@
   - [x] **Implement hybrid approach (Option C)** - Add events for off-chain indexing
   - [x] Add `ClickEvent` event with indexed clicker address
   - [x] Emit events in `click()` function for future analytics
-- [ ] **Test contract locally**
-  - [ ] Write unit tests in `packages/hardhat/test/`
-  - [ ] Test `click()` function increments both counters
-  - [ ] Test user-specific counting works correctly
-  - [ ] Test event emission works properly
-  - [ ] Run `yarn test` to verify all tests pass
+- [x] **Test contract locally**
+  - [x] Write comprehensive test suite covering deployment, click functionality, events, gas efficiency, and edge cases
+  - [x] Run `yarn test` to verify all tests pass (now fully compatible with ethers.js v6)
 
 ### Hybrid Implementation Testing
 
