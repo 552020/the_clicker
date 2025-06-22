@@ -113,18 +113,60 @@ See [detailed project plan](docs/the-clicker.md) and [to-do list](docs/to-do.md)
 
 ## 🧪 Testing
 
-### Local Testing
+### How Hardhat Tests Work
+
+**No local node required!** Hardhat tests run on an **in-memory blockchain** that starts automatically:
+
+- Tests run on a temporary, in-memory blockchain
+- Each test gets a fresh blockchain state
+- No manual node setup needed
+- Perfect for fast, isolated testing
+
+### Running Tests
 
 ```bash
 # Run all tests
 yarn test
 
 # Run specific test file
-yarn test YourContract.ts
+yarn test TheClicker.ts
 
-# Test with coverage
+# Run tests with coverage
 yarn test:coverage
+
+# Run tests in watch mode (re-runs on file changes)
+yarn test:watch
 ```
+
+**Why `yarn test` works from root?**
+This project uses **Yarn Workspaces** which automatically routes commands:
+
+- Root `package.json` has: `"test": "yarn hardhat:test"`
+- Which runs: `"hardhat:test": "yarn workspace @se-2/hardhat test"`
+- This executes the test command in the hardhat package automatically
+
+**Benefits of running from root:**
+
+- ✅ **Simpler** - no need to navigate to subdirectories
+- ✅ **Consistent** - same pattern for all commands (`yarn start`, `yarn deploy`, etc.)
+- ✅ **Workspace-aware** - yarn handles the routing automatically
+
+### Test Structure
+
+Our test suite includes:
+
+- **Contract deployment** validation
+- **Core functionality** testing (`click()`, `getUserClicks()`)
+- **Event emission** verification (for off-chain indexing)
+- **Hybrid approach** validation (on-chain storage + events)
+- **Gas efficiency** testing
+- **Edge cases** and scalability testing
+
+### Test Documentation
+
+For detailed information about the testing stack and keywords used, see:
+
+- [TheClicker Test Documentation](packages/hardhat/test/TheClicker.ts.md) - Complete guide to testing keywords, libraries, and concepts
 
 ### CLI Interaction
 
@@ -133,9 +175,9 @@ yarn test:coverage
 npx hardhat console --network localhost
 
 # Interact with contract
-> const contract = await ethers.getContract("YourContract")
+> const contract = await ethers.getContract("TheClicker")
 > await contract.click()
-> await contract.totalCount()
+> await contract.totalClicks()
 ```
 
 ## 📚 Documentation
