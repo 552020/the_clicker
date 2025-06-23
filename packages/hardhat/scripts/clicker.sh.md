@@ -94,29 +94,6 @@ You can view and interact with the contract directly on [Sepolia Etherscan](http
 
 ---
 
-## 📝 **Troubleshooting**
-
-- If you see `0x` as the result for `totalClicks`, it means the contract counter is zero or the call failed.
-- Make sure your contract address is correct and deployed on the network you are querying.
-- Ensure your API key and private key are set and valid.
-- For errors about `cast` not found, install Foundry as shown above.
-
----
-
-## 🔒 **Security Notes**
-
-- **Never commit your private key or API keys to version control.**
-- **Always use a separate Metamask account for development and testing. Never use your main account or any account holding significant funds.**
-- Use environment variables or a `.env` file (with proper `.gitignore`) for secrets.
-
----
-
-## 📂 **Location**
-
-Place this script in `packages/hardhat/scripts/clicker.sh` for best organization.
-
----
-
 ## 📚 **References**
 
 - [Foundry Book: cast](https://book.getfoundry.sh/reference/cast/cast)
