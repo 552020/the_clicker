@@ -1,0 +1,199 @@
+{
+  "address": "0xc6e28A99A04407BA45EdfA7E75dcE5E558eA845F",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "clicker",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "newTotalClicks",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "userClickCount",
+          "type": "uint256"
+        }
+      ],
+      "name": "ClickEvent",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "click",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        }
+      ],
+      "name": "getUserClicks",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "totalClicks",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "userClicks",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x47cf4ccb67bb9f485cfa595ca0a092e195b4c302c23bcc7ac2d7305eccccca84",
+  "receipt": {
+    "to": null,
+    "from": "0x8CB80b37cc7193D0f055b1189F25eB903D888D3A",
+    "contractAddress": "0xc6e28A99A04407BA45EdfA7E75dcE5E558eA845F",
+    "transactionIndex": 79,
+    "gasUsed": "154977",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xc34d4267f361a05058030a5bfc016f8e2723e28402d1e26e3f4ea1894d9221d7",
+    "transactionHash": "0x47cf4ccb67bb9f485cfa595ca0a092e195b4c302c23bcc7ac2d7305eccccca84",
+    "logs": [],
+    "blockNumber": 8611112,
+    "cumulativeGasUsed": "8647217",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "27285d69d9d605f874def4137653de60",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"clicker\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"newTotalClicks\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"userClickCount\",\"type\":\"uint256\"}],\"name\":\"ClickEvent\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"click\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"user\",\"type\":\"address\"}],\"name\":\"getUserClicks\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"totalClicks\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"userClicks\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"events\":{\"ClickEvent(address,uint256,uint256)\":{\"params\":{\"clicker\":\"The address of the user who clicked\",\"newTotalClicks\":\"The updated total count after the click\",\"userClickCount\":\"The user's personal click count after the click\"}}},\"kind\":\"dev\",\"methods\":{\"click()\":{\"details\":\"This is the main function for The Clicker DApp. Emits event for off-chain indexing.\"},\"getUserClicks(address)\":{\"params\":{\"user\":\"The address of the user\"},\"returns\":{\"_0\":\"Number of clicks registered by the user\"}}},\"title\":\"The Clicker\",\"version\":1},\"userdoc\":{\"events\":{\"ClickEvent(address,uint256,uint256)\":{\"notice\":\"Emitted when a user clicks\"}},\"kind\":\"user\",\"methods\":{\"click()\":{\"notice\":\"Increment both the global counter and the caller's personal count\"},\"getUserClicks(address)\":{\"notice\":\"Retrieve the click count for a specific user\"},\"totalClicks()\":{\"notice\":\"Total number of clicks across all users\"},\"userClicks(address)\":{\"notice\":\"Mapping of user addresses to their individual click counts\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/TheClicker.sol\":\"TheClicker\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/TheClicker.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.20;\\n\\n/// @title The Clicker\\ncontract TheClicker {\\n    /// @notice Total number of clicks across all users\\n    uint256 public totalClicks;\\n    \\n    /// @notice Mapping of user addresses to their individual click counts\\n    mapping(address => uint256) public userClicks;\\n\\n    /// @notice Emitted when a user clicks\\n    /// @param clicker The address of the user who clicked\\n    /// @param newTotalClicks The updated total count after the click\\n    /// @param userClickCount The user's personal click count after the click\\n    event ClickEvent(address indexed clicker, uint256 newTotalClicks, uint256 userClickCount);\\n\\n    /// @notice Increment both the global counter and the caller's personal count\\n    /// @dev This is the main function for The Clicker DApp. Emits event for off-chain indexing.\\n    function click() external {\\n        totalClicks += 1;\\n        userClicks[msg.sender] += 1;\\n        \\n        // Emit event for off-chain analytics and indexing (Phase 5)\\n        emit ClickEvent(msg.sender, totalClicks, userClicks[msg.sender]);\\n    }\\n\\n    /// @notice Retrieve the click count for a specific user\\n    /// @param user The address of the user\\n    /// @return Number of clicks registered by the user\\n    function getUserClicks(address user) external view returns (uint256) {\\n        return userClicks[user];\\n    }\\n}\\n\",\"keccak256\":\"0x0217875ef310744c53a321174dd0c4c961e278ef729f59115cd1be546c189be7\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506101d7806100206000396000f3fe608060405234801561001057600080fd5b506004361061004c5760003560e01c806315e62b91146100515780636489fb881461006c5780637c2bb719146100955780637d55923d146100b5575b600080fd5b61005a60005481565b60405190815260200160405180910390f35b61005a61007a36600461014a565b6001600160a01b031660009081526001602052604090205490565b61005a6100a336600461014a565b60016020526000908152604090205481565b6100bd6100bf565b005b60016000808282546100d1919061017a565b909155505033600090815260016020819052604082208054919290916100f890849061017a565b909155505060008054338083526001602090815260409384902054845193845290830152917f0da73e62a76a02f96ff9c1203e1639e5dbbfb604d2aa2ccde5602bdc505b6c0e910160405180910390a2565b60006020828403121561015c57600080fd5b81356001600160a01b038116811461017357600080fd5b9392505050565b8082018082111561019b57634e487b7160e01b600052601160045260246000fd5b9291505056fea26469706673582212200f22f1f109dc5116092c475aad59aa39e14dca2a1f56e8a610de78bc4aee1d9664736f6c63430008140033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061004c5760003560e01c806315e62b91146100515780636489fb881461006c5780637c2bb719146100955780637d55923d146100b5575b600080fd5b61005a60005481565b60405190815260200160405180910390f35b61005a61007a36600461014a565b6001600160a01b031660009081526001602052604090205490565b61005a6100a336600461014a565b60016020526000908152604090205481565b6100bd6100bf565b005b60016000808282546100d1919061017a565b909155505033600090815260016020819052604082208054919290916100f890849061017a565b909155505060008054338083526001602090815260409384902054845193845290830152917f0da73e62a76a02f96ff9c1203e1639e5dbbfb604d2aa2ccde5602bdc505b6c0e910160405180910390a2565b60006020828403121561015c57600080fd5b81356001600160a01b038116811461017357600080fd5b9392505050565b8082018082111561019b57634e487b7160e01b600052601160045260246000fd5b9291505056fea26469706673582212200f22f1f109dc5116092c475aad59aa39e14dca2a1f56e8a610de78bc4aee1d9664736f6c63430008140033",
+  "devdoc": {
+    "events": {
+      "ClickEvent(address,uint256,uint256)": {
+        "params": {
+          "clicker": "The address of the user who clicked",
+          "newTotalClicks": "The updated total count after the click",
+          "userClickCount": "The user's personal click count after the click"
+        }
+      }
+    },
+    "kind": "dev",
+    "methods": {
+      "click()": {
+        "details": "This is the main function for The Clicker DApp. Emits event for off-chain indexing."
+      },
+      "getUserClicks(address)": {
+        "params": {
+          "user": "The address of the user"
+        },
+        "returns": {
+          "_0": "Number of clicks registered by the user"
+        }
+      }
+    },
+    "title": "The Clicker",
+    "version": 1
+  },
+  "userdoc": {
+    "events": {
+      "ClickEvent(address,uint256,uint256)": {
+        "notice": "Emitted when a user clicks"
+      }
+    },
+    "kind": "user",
+    "methods": {
+      "click()": {
+        "notice": "Increment both the global counter and the caller's personal count"
+      },
+      "getUserClicks(address)": {
+        "notice": "Retrieve the click count for a specific user"
+      },
+      "totalClicks()": {
+        "notice": "Total number of clicks across all users"
+      },
+      "userClicks(address)": {
+        "notice": "Mapping of user addresses to their individual click counts"
+      }
+    },
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 5,
+        "contract": "contracts/TheClicker.sol:TheClicker",
+        "label": "totalClicks",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 10,
+        "contract": "contracts/TheClicker.sol:TheClicker",
+        "label": "userClicks",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_address,t_uint256)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_mapping(t_address,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
