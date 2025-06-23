@@ -63,14 +63,54 @@
 
 ### Testnet Deployment
 
+- [ ] **Environment Setup**
+
+  - [ ] Copy `.env.example` to `.env`: `cp .env.example .env`
+  - [ ] Get Alchemy API key from https://dashboard.alchemyapi.io
+  - [ ] Export MetaMask dev account private key
+  - [ ] (Optional) Get Etherscan API key from https://etherscan.io/apis
+  - [ ] Fill in environment variables in `.env` file
+
+- [ ] **Get testnet ETH**
+
+  - [ ] Sepolia faucet: [Alchemy](https://sepoliafaucet.com/) or [Infura](https://www.infura.io/faucet/sepolia)
+  - [ ] Alternative faucets: [Chainlink](https://faucets.chain.link/sepolia) or [Paradigm](https://faucet.paradigm.xyz/)
+  - [ ] Verify balance: Check MetaMask or use `yarn account` to see account details
+
 - [ ] **Deploy to testnet**
-  - [ ] Get testnet ETH (Sepolia faucet)
-  - [ ] Deploy contract: `yarn deploy --network sepolia`
-  - [ ] Verify contract on Etherscan
+
+  ```bash
+  # Compile contracts first
+  yarn compile
+
+  # Deploy to Sepolia
+  yarn deploy --network sepolia
+
+  # Check deployment status
+  yarn account
+  ```
+
+- [ ] **Verify contract** (optional but recommended)
+
+  ```bash
+  # Verify on Etherscan (requires ETHERSCAN_MAINNET_API_KEY)
+  yarn verify --network sepolia
+
+  # Or verify manually on https://sepolia.etherscan.io/
+  ```
+
 - [ ] **Test on testnet**
-  - [ ] Use Hardhat console with testnet: `npx hardhat console --network sepolia`
-  - [ ] Test `click()` function on live testnet
+
+  - [ ] Use Hardhat console: `npx hardhat console --network sepolia`
+  - [ ] Test `click()` function calls
   - [ ] Verify state changes persist
+  - [ ] Check emitted events on Etherscan
+
+- [ ] **Troubleshooting**
+  - [ ] **Insufficient funds**: Get more Sepolia ETH from faucet
+  - [ ] **Network issues**: Check Alchemy API key and network configuration
+  - [ ] **Verification fails**: Ensure Etherscan API key is correct
+  - [ ] **Gas estimation fails**: Check contract compilation and network connectivity
 
 ### Documentation
 

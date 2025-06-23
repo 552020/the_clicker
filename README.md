@@ -59,33 +59,88 @@ We're currently building the foundation - a basic smart contract that tracks glo
 
    > **Note**: This resolves to `ts-node scripts/runHardhatDeployWithPK.ts`. If you're using Hardhat without Scaffold-ETH, the equivalent command would be `npx hardhat run scripts/deploy.ts --network localhost`.
 
-4. **Start frontend**
+4. **Test contract manually** (Recommended first step)
+
+   ```bash
+   cd packages/hardhat
+   npx hardhat console --network localhost
+   ```
+
+   Then test the contract:
+
+   ```javascript
+   > const contract = await ethers.getContractAt("TheClicker", "0x5FbDB2315678afecb367f032d93F642f64180aa3")
+   > await contract.click()
+   > await contract.totalClicks()
+   ```
+
+   > **See**: [Hardhat Manual Testing Guide](docs/hardhat-manual-testing.md) for complete testing workflow
+
+5. **Start frontend** (Optional - for UI testing)
 
    ```bash
    yarn start
    ```
 
-5. **Test the contract**
+6. **Test via debug UI**
    - Navigate to `http://localhost:3000/debug`
    - Connect your wallet
    - Try the `click()` function!
 
 ### Testnet Deployment
 
-1. **Get testnet ETH**
+1. **Set up environment**
+
+   ```bash
+   # Copy environment template
+   cp .env.example .env
+
+   # Edit .env with your API keys
+   # - ALCHEMY_API_KEY: Get from https://dashboard.alchemyapi.io
+   # - __RUNTIME_DEPLOYER_PRIVATE_KEY: Your MetaMask dev account private key
+   # - ETHERSCAN_MAINNET_API_KEY: Get from https://etherscan.io/apis (optional)
+   ```
+
+2. **Get testnet ETH**
 
    - Sepolia faucet: [Alchemy](https://sepoliafaucet.com/) or [Infura](https://www.infura.io/faucet/sepolia)
+   - Alternative faucets: [Chainlink](https://faucets.chain.link/sepolia) or [Paradigm](https://faucet.paradigm.xyz/)
 
-2. **Deploy to testnet**
+3. **Deploy to testnet**
 
    ```bash
    yarn deploy --network sepolia
    ```
 
-3. **Verify contract** (optional)
+4. **Verify contract** (optional)
    ```bash
    yarn verify --network sepolia
    ```
+
+> **📖 For detailed step-by-step instructions, see [Sepolia Deployment Guide](docs/sepolia-deployment.md)**
+
+### Mainnet Deployment
+
+> **🚧 Coming Soon - Not Yet Implemented**
+
+Mainnet deployment will be available after thorough testing on Sepolia testnet and completion of security audits.
+
+**Prerequisites for mainnet:**
+
+- ✅ **Thorough testnet testing** completed
+- ✅ **Security audit** performed
+- ✅ **Gas optimization** completed
+- ✅ **Real ETH** for deployment and gas fees
+- ✅ **Production-ready** frontend and infrastructure
+
+**Planned mainnet features:**
+
+- **Token incentives** (Phase 3)
+- **AI agent integration** (Phase 4)
+- **Leaderboard analytics** (Phase 5)
+- **Production monitoring** and alerting
+
+> **📖 Mainnet deployment guide will be available in [docs/mainnet-deployment.md](docs/mainnet-deployment.md) when ready**
 
 ## 📋 Project Phases
 
