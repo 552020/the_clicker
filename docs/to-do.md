@@ -19,17 +19,17 @@
 
 ### Hybrid Implementation Testing
 
-- [ ] **Local testing with Hardhat**
-  - [ ] Deploy contract to local network
-  - [ ] Call `click()` from different addresses
-  - [ ] Verify `userClicks` mapping updates correctly
-  - [ ] Check emitted `ClickEvent` logs
-  - [ ] Test `getUserClicks()` function with different addresses
-- [ ] **Testnet deployment**
-  - [ ] Deploy to Sepolia or Base Goerli testnet
-  - [ ] Verify contract on Etherscan
-  - [ ] Test `click()` function on live testnet
-  - [ ] Verify events are emitted correctly
+- [x] **Local testing with Hardhat**
+  - [x] Deploy contract to local network
+  - [x] Call `click()` from different addresses
+  - [x] Verify `userClicks` mapping updates correctly
+  - [x] Check emitted `ClickEvent` logs
+  - [x] Test `getUserClicks()` function with different addresses
+- [x] **Testnet deployment**
+  - [x] Deploy to Sepolia testnet
+  - [x] Verify contract on Etherscan
+  - [x] Test `click()` function on live testnet
+  - [x] Verify events are emitted correctly
 - [ ] **Proof-of-concept off-chain ranking**
   - [ ] Write small script to read events and build ranking
   - [ ] Or create basic The Graph subgraph
@@ -42,9 +42,9 @@
   - [x] Create deployment script `01_deploy_clicker.ts`
   - [x] Update deployment script for TheClicker contract
   - [x] Set up proper contract deployment logic
-- [ ] **Configure testnet deployment**
-  - [ ] Add Sepolia/Base Goerli network configuration
-  - [ ] Set up environment variables for private keys
+- [x] **Configure testnet deployment**
+  - [x] Add Sepolia network configuration
+  - [x] Set up environment variables for private keys
 
 ### Local Testing & Interaction
 
@@ -56,28 +56,32 @@
   - [x] Test `click()` function calls
   - [x] Verify state changes in contract
   - [x] **Complete manual testing workflow** - All steps from [Hardhat Manual Testing Guide](docs/hardhat-manual-testing.md) verified and working
-- [ ] **Test via debug UI**
-  - [ ] Run `yarn start` to start frontend
-  - [ ] Navigate to `http://localhost:3000/debug`
-  - [ ] Test contract interactions through UI
+- [x] **Test via debug UI**
+  - [x] Run `yarn start` to start frontend
+  - [x] Navigate to `http://localhost:3000/debug`
+  - [x] Test contract interactions through UI
+- [x] **Create command-line testing script**
+  - [x] Create `clicker.sh` bash script for contract interaction
+  - [x] Document script usage and setup in `clicker.sh.md`
+  - [x] Test script functionality on Sepolia testnet
 
 ### Testnet Deployment
 
-- [ ] **Environment Setup**
+- [x] **Environment Setup**
 
-  - [ ] Copy `.env.example` to `.env`: `cp .env.example .env`
-  - [ ] Get Alchemy API key from https://dashboard.alchemyapi.io
-  - [ ] Export MetaMask dev account private key
-  - [ ] (Optional) Get Etherscan API key from https://etherscan.io/apis
-  - [ ] Fill in environment variables in `.env` file
+  - [x] Copy `.env.example` to `.env`: `cp .env.example .env`
+  - [x] Get Alchemy API key from https://dashboard.alchemyapi.io
+  - [x] Export MetaMask dev account private key
+  - [x] (Optional) Get Etherscan API key from https://etherscan.io/apis
+  - [x] Fill in environment variables in `.env` file
 
-- [ ] **Get testnet ETH**
+- [x] **Get testnet ETH**
 
-  - [ ] Sepolia faucet: [Alchemy](https://sepoliafaucet.com/) or [Infura](https://www.infura.io/faucet/sepolia)
-  - [ ] Alternative faucets: [Chainlink](https://faucets.chain.link/sepolia) or [Paradigm](https://faucet.paradigm.xyz/)
-  - [ ] Verify balance: Check MetaMask or use `yarn account` to see account details
+  - [x] Sepolia faucet: [Alchemy](https://sepoliafaucet.com/) or [Infura](https://www.infura.io/faucet/sepolia)
+  - [x] Alternative faucets: [Chainlink](https://faucets.chain.link/sepolia) or [Paradigm](https://faucet.paradigm.xyz/)
+  - [x] Verify balance: Check MetaMask or use `yarn account` to see account details
 
-- [ ] **Deploy to testnet**
+- [x] **Deploy to testnet**
 
   ```bash
   # Compile contracts first
@@ -90,7 +94,7 @@
   yarn account
   ```
 
-- [ ] **Verify contract** (optional but recommended)
+- [x] **Verify contract** (optional but recommended)
 
   ```bash
   # Verify on Etherscan (requires ETHERSCAN_MAINNET_API_KEY)
@@ -99,41 +103,42 @@
   # Or verify manually on https://sepolia.etherscan.io/
   ```
 
-- [ ] **Test on testnet**
+- [x] **Test on testnet**
 
-  - [ ] Use Hardhat console: `npx hardhat console --network sepolia`
-  - [ ] Test `click()` function calls
-  - [ ] Verify state changes persist
-  - [ ] Check emitted events on Etherscan
-
-- [ ] **Troubleshooting**
-  - [ ] **Insufficient funds**: Get more Sepolia ETH from faucet
-  - [ ] **Network issues**: Check Alchemy API key and network configuration
-  - [ ] **Verification fails**: Ensure Etherscan API key is correct
-  - [ ] **Gas estimation fails**: Check contract compilation and network connectivity
-
-### Documentation
-
-- [ ] **Update README**
-  - [ ] Add local development instructions
-  - [ ] Add CLI interaction examples
-  - [ ] Document contract functions and events
-- [ ] **Create interaction scripts**
-  - [ ] Write Hardhat script for automated clicking
-  - [ ] Document Geth CLI commands
-
----
+  - [x] Use Hardhat console: `npx hardhat console --network sepolia`
+  - [x] Test `click()` function calls
+  - [x] Verify state changes persist
+  - [x] Check emitted events on Etherscan
 
 ## Phase 2: Frontend MVP 🖥️
+
+### Basic Interface Implementation (Priority)
+
+- [ ] **Create basic clicker interface in `page.tsx`**
+  - [x] ~~Add wallet connection button using shadcn Button component~~ (Using Scaffold-ETH's pre-implemented `RainbowKitCustomConnectButton` in header)
+  - [x] ~~Display connected address when wallet is connected~~ (Already implemented with `<Address address={connectedAddress} />`)
+  - [ ] Add "Click" button that calls the smart contract's `click()` function
+  - [ ] Add input field to enter an address and query their click count
+  - [ ] Display total number of clicks from the contract
+  - [ ] Display current user's click count
+  - [ ] Use shadcn components (Button, Input, Card) for basic styling
+  - [ ] Implement proper error handling for failed transactions
+  - [ ] Add loading states during contract interactions
+
+### Contract Integration
+
+- [ ] **Use Scaffold-ETH hooks**
+  - [ ] Implement `useScaffoldReadContract` for reading `totalClicks()`
+  - [ ] Implement `useScaffoldReadContract` for reading `getUserClicks(address)`
+  - [ ] Implement `useScaffoldWriteContract` for `click()` function
+  - [ ] Add proper error handling and transaction status
 
 ### Wallet Integration
 
 - [ ] **Connect MetaMask**
-  - [ ] Test wallet connection on debug page
+  - [ ] Test wallet connection on main page
   - [ ] Ensure proper network switching
-- [ ] **Display user information**
-  - [ ] Show connected address
-  - [ ] Display user's click count
+  - [ ] Handle wallet disconnection gracefully
 
 ### UI Components
 
@@ -242,14 +247,13 @@
 
 ## Immediate Next Steps (Priority Order) 🚀
 
-1. **Test the hybrid contract locally** - Write and run unit tests for events
-2. **Deploy and test locally** - Use Hardhat local network to verify functionality
-3. **Deploy to testnet** - Get contract live on Sepolia with events
-4. **Create proof-of-concept ranking** - Build off-chain ranking from events
-5. **Test CLI interaction** - Verify it works via command line
-6. **Create basic frontend** - Build simple click interface
+1. **Create basic clicker interface in `page.tsx`** - Add wallet connection, click button, and display components
+2. **Implement contract integration** - Use Scaffold-ETH hooks for reading and writing to the contract
+3. **Add transaction feedback** - Show loading states and transaction status
+4. **Test end-to-end user flow** - Complete user journey from wallet connection to clicking
+5. **Create proof-of-concept off-chain ranking** - Build off-chain ranking from events (Phase 5)
 
 ---
 
 _Last updated: [Current Date]_
-_Status: Phase 1 - Smart contract completed, testing in progress_
+_Status: Phase 1 - Smart contract completed and tested, ready for Phase 2 frontend development_
