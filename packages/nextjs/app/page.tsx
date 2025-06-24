@@ -1,14 +1,54 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Button } from "../components/ui/button";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
   const { address: connectedAddress } = useAccount();
+  const [queryAddress, setQueryAddress] = useState<string>("");
+
+  // Read total clicks
+  const { data: totalClicks } = useScaffoldReadContract({
+    contractName: "TheClicker",
+    functionName: "totalClicks",
+  });
+
+  // Read current user's clicks
+  const { data: userClicks } = useScaffoldReadContract({
+    contractName: "TheClicker",
+    functionName: "getUserClicks",
+    args: [connectedAddress],
+  });
+
+  // Read queried address clicks
+  const { data: queriedClicks } = useScaffoldReadContract({
+    contractName: "TheClicker",
+    functionName: "getUserClicks",
+    args: [queryAddress as `0x${string}`],
+  });
+
+  // Write contract for clicking
+  const { writeContractAsync: clickAsync, isMining: isClicking } = useScaffoldWriteContract({
+    contractName: "TheClicker",
+  });
+
+  const handleClick = async () => {
+    if (!connectedAddress) return;
+
+    try {
+      await clickAsync({
+        functionName: "click",
+      });
+    } catch (error) {
+      console.error("Click failed:", error);
+    }
+  };
 
   return (
     <>
@@ -16,15 +56,49 @@ const Home: NextPage = () => {
         <div className="px-5">
           <h1 className="text-center">
             <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">Scaffold-ETH 2</span>
+            <span className="block text-4xl font-bold">The Clicker</span>
           </h1>
+
           <div className="flex justify-center items-center space-x-2 flex-col">
             <p className="my-2 font-medium">Connected Address:</p>
             <Address address={connectedAddress} />
-            <Button className="mt-4">Shadcn Button</Button>
+
+            {/* Click Button */}
+            <Button onClick={handleClick} disabled={!connectedAddress || isClicking} className="mt-4">
+              {isClicking ? "Clicking..." : "Click!"}
+            </Button>
+
+            {/* Total Clicks Display */}
+            <div className="mt-4 text-center">
+              <p className="text-lg font-semibold">Total Clicks: {totalClicks?.toString() || "0"}</p>
+            </div>
+
+            {/* User Clicks Display */}
+            {connectedAddress && (
+              <div className="mt-2 text-center">
+                <p className="text-md">Your Clicks: {userClicks?.toString() || "0"}</p>
+              </div>
+            )}
+
+            {/* Query Other User's Clicks */}
+            <div className="mt-6 text-center">
+              <p className="text-md mb-2">Query another user&apos;s clicks:</p>
+              <input
+                type="text"
+                placeholder="Enter address (0x...)"
+                value={queryAddress}
+                onChange={e => setQueryAddress(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-md w-80 text-center"
+              />
+              {queryAddress && queriedClicks !== undefined && (
+                <p className="mt-2 text-sm">
+                  Clicks for {queryAddress}: {queriedClicks.toString()}
+                </p>
+              )}
+            </div>
           </div>
 
-          <p className="text-center text-lg">
+          <p className="text-center text-lg mt-8">
             Get started by editing{" "}
             <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
               packages/nextjs/app/page.tsx
@@ -33,7 +107,7 @@ const Home: NextPage = () => {
           <p className="text-center text-lg">
             Edit your smart contract{" "}
             <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              YourContract.sol
+              TheClicker.sol
             </code>{" "}
             in{" "}
             <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
