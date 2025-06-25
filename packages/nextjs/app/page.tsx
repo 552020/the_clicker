@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
+// import { useState } from "react";
+import { PlusButton } from "../components/PlusButton";
 // import Link from "next/link";
 // import { EthereumCssLogo } from "../components/EthereumCssLogo";
 // import { EthereumCssLogoSmall } from "../components/EthereumCssLogoSmall";
-import { Button } from "../components/ui/button";
+// import { Button } from "../components/ui/button";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
 // import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Address } from "~~/components/scaffold-eth";
+// import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
@@ -16,9 +17,8 @@ const Home: NextPage = () => {
   const account = useAccount();
   console.log(account);
   const connectedAddress = account.address;
-  const status = account.status;
-  console.log("Connected Address:", connectedAddress);
-  const [queryAddress, setQueryAddress] = useState<string>("");
+  // const status = account.status;
+  // const [queryAddress, setQueryAddress] = useState<string>("");
 
   // Read total clicks
   const { data: totalClicks } = useScaffoldReadContract({
@@ -33,12 +33,11 @@ const Home: NextPage = () => {
     args: [connectedAddress],
   });
 
-  // Read queried address clicks
-  const { data: queriedClicks } = useScaffoldReadContract({
-    contractName: "TheClicker",
-    functionName: "getUserClicks",
-    args: [queryAddress as `0x${string}`],
-  });
+  // const { data: queriedClicks } = useScaffoldReadContract({
+  //   contractName: "TheClicker",
+  //   functionName: "getUserClicks",
+  //   args: [queryAddress as `0x${string}`],
+  // });
 
   // Write contract for clicking
   const { writeContractAsync: clickAsync, isMining: isClicking } = useScaffoldWriteContract({
@@ -59,108 +58,39 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <div className="flex items-center flex-col grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">The Clicker</span>
-          </h1>
-
-          <div className="flex justify-center items-center space-x-2 flex-col">
-            <p className="my-2 font-medium">Connected Address:</p>
-            {status === "connecting" || status === "reconnecting" ? (
-              <Address />
-            ) : status === "disconnected" ? (
-              <span>No wallet connected</span>
-            ) : (
-              <Address address={connectedAddress} />
-            )}
-
-            {/* Click Button */}
-            <Button onClick={handleClick} disabled={!connectedAddress || isClicking} className="mt-4">
-              {isClicking ? "Clicking..." : "Click!"}
-            </Button>
-
-            {/* Total Clicks Display */}
-            <div className="mt-4 text-center">
-              <p className="text-lg font-semibold">Total Clicks: {totalClicks?.toString() || "0"}</p>
-            </div>
-
-            {/* User Clicks Display */}
-            {connectedAddress && (
-              <div className="mt-2 text-center">
-                <p className="text-md">Your Clicks: {userClicks?.toString() || "0"}</p>
+      <div className="flex flex-col grow pt-10 w-full max-w-xl mx-auto">
+        <div className="grid grid-cols-1 grid-rows-5 md:grid-cols-3 md:grid-rows-3 gap-4 w-full h-[60vh] min-h-[400px]">
+          {/* Top row: Your Clicks (left), Ranking (right) in one div */}
+          <div className="border-2 border-red-500 flex flex-row justify-between items-start md:col-span-3 md:row-start-1 row-start-1 col-start-1">
+            <div className="flex flex-col items-center w-1/2">
+              <div className="border border-pink-500 w-full text-center text-lg font-semibold">Your Clicks</div>
+              <div className="border border-orange-500 w-full text-center text-2xl">
+                {userClicks?.toString() || "0"}
               </div>
-            )}
-
-            {/* Query Other User's Clicks */}
-            <div className="mt-6 text-center">
-              <p className="text-md mb-2">Query another user&apos;s clicks:</p>
-              <input
-                type="text"
-                placeholder="Enter address (0x...)"
-                value={queryAddress}
-                onChange={e => setQueryAddress(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md w-80 text-center"
-              />
-              {queryAddress && queriedClicks !== undefined && (
-                <p className="mt-2 text-sm">
-                  Clicks for {queryAddress}: {queriedClicks.toString()}
-                </p>
-              )}
+            </div>
+            <div className="flex flex-col items-center w-1/2">
+              <div className="border border-pink-500 w-full text-center text-lg font-semibold">Ranking</div>
+              <div className="border border-orange-500 w-full text-center text-2xl text-gray-400">—</div>
             </div>
           </div>
-
-          {/* <p className="text-center text-lg mt-8">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/nextjs/app/page.tsx
-            </code>
-          </p> */}
-          {/* <p className="text-center text-lg">
-            Edit your smart contract{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              TheClicker.sol
-            </code>{" "}
-            in{" "}
-            <code className="italic bg-base-300 text-base font-bold max-w-full break-words break-all inline-block">
-              packages/hardhat/contracts
-            </code>
-          </p> */}
-
-          {/* Test EthereumCssLogo component */}
-          {/* <div className="flex justify-center my-12 border-2 border-red-500">
-            <EthereumCssLogo />
+          {/* Center: Plus Button */}
+          <div className="border-2 border-green-500 flex flex-col justify-center items-center md:row-start-2 md:col-start-2 row-start-3 col-start-1">
+            <PlusButton onClick={handleClick} disabled={!connectedAddress || isClicking} isLoading={isClicking} />
           </div>
-          <div className="flex justify-center my-12 border-2 border-red-500">
-            <EthereumCssLogoSmall />
-          </div> */}
+          {/* Bottom row: Total Clicks (left), Clickcoins Owned (right) in one div */}
+          <div className="border-2 border-purple-500 flex flex-row justify-between items-end md:col-span-3 md:row-start-3 row-start-5 col-start-1">
+            <div className="flex flex-col items-center w-1/2">
+              <div className="border border-pink-500 w-full text-center text-lg font-semibold">Total Clicks</div>
+              <div className="border border-orange-500 w-full text-center text-2xl">
+                {totalClicks?.toString() || "0"}
+              </div>
+            </div>
+            <div className="flex flex-col items-center w-1/2">
+              <div className="border border-pink-500 w-full text-center text-lg font-semibold">Clickcoins Owned</div>
+              <div className="border border-orange-500 w-full text-center text-2xl text-gray-400">—</div>
+            </div>
+          </div>
         </div>
-
-        {/* <div className="grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col md:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contracts
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <MagnifyingGlassIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Explore your local transactions with the{" "}
-                <Link href="/blockexplorer" passHref className="link">
-                  Block Explorer
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-          </div>
-        </div> */}
       </div>
     </>
   );
