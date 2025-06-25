@@ -285,3 +285,7 @@ npx hardhat console --network localhost
 > await contract.click()
 > await contract.totalClicks()
 ```
+
+# Resources
+
+- [Ethereum Brand Assets and Logos](https://ethereum.org/en/assets/)
