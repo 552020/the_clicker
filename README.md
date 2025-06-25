@@ -119,6 +119,53 @@ We're currently building the foundation - a basic smart contract that tracks glo
 
 > **📖 For detailed step-by-step instructions, see [Sepolia Deployment Guide](docs/sepolia-deployment.md)**
 
+### Network Configuration
+
+The frontend is configured to support both local development and production networks:
+
+**Frontend Network Targeting:**
+
+- **Local Development**: Connects to Hardhat network when running `yarn start`
+- **Production**: Connects to Sepolia network on Vercel deployment
+- **User Choice**: Users can switch between networks in their wallet
+
+**Configuration File:** `packages/nextjs/scaffold.config.ts`
+
+```typescript
+targetNetworks: [chains.hardhat, chains.sepolia];
+```
+
+**Deployment Commands:**
+
+```bash
+# Local development (Hardhat)
+yarn deploy                    # Deploys to local Hardhat network
+
+# Production (Sepolia)
+yarn deploy --network sepolia  # Deploys to Sepolia testnet
+```
+
+> **💡 Note**: The `scaffold.config.ts` only affects frontend network targeting. Contract deployment is controlled by the `--network` flag in deployment commands.
+
+### Known Issues
+
+#### IndexedDB Error During Build (Non-Critical)
+
+When deploying to Vercel, you may see warnings like:
+
+```
+ReferenceError: indexedDB is not defined
+```
+
+**This is normal and expected** for web3 applications because:
+
+- **IndexedDB is a browser API** that doesn't exist during server-side rendering (SSR)
+- **Web3 libraries** try to access IndexedDB during initialization
+- **The error is non-blocking** - your app still builds and deploys successfully
+- **Many production dApps** have similar warnings
+
+**No action required** - this doesn't affect functionality and is a common issue in the web3 ecosystem.
+
 ### Mainnet Deployment
 
 > **🚧 Coming Soon - Not Yet Implemented**
@@ -238,51 +285,3 @@ npx hardhat console --network localhost
 > await contract.click()
 > await contract.totalClicks()
 ```
-
-## 📚 Documentation
-
-### Project Documentation
-
-- [Project Plan](docs/the-clicker.md) - Detailed project overview and phases
-- [To-Do List](docs/to-do.md) - Current tasks and progress tracking
-- [Scaffold-ETH 2 Guide](docs/Scaffold-ETH_2_README.md) - Framework documentation
-
-### Development Resources
-
-- [Solidity Documentation](https://docs.soliditylang.org/) - Official Solidity language docs
-- [NatSpec Format](https://docs.soliditylang.org/en/latest/natspec-format.html) - Smart contract documentation standard
-- [Hardhat Documentation](https://hardhat.org/docs) - Development framework docs
-- [Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2) - Framework repository
-- [Storage vs Logs Guide](docs/storage-vs-logs.md) - On-chain storage vs emit logs for tracking and rankings
-
-### Ethereum Resources
-
-- [Ethereum.org](https://ethereum.org/developers/) - Official Ethereum developer docs
-- [Sepolia Testnet](https://sepolia.dev/) - Testnet information
-- [Etherscan](https://etherscan.io/) - Blockchain explorer
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENCE](LICENCE) file for details.
-
-## 🙏 Acknowledgments
-
-- [Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2) team for the amazing development framework
-- Ethereum community for the innovative smart contract ecosystem
-- All contributors and testers
-
----
-
-**Built with ❤️ using Scaffold-ETH 2**
-
-_For questions or support, please open an issue on GitHub._

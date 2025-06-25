@@ -10,7 +10,12 @@ import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
-  const { address: connectedAddress } = useAccount();
+  // const { address: connectedAddress } = useAccount();
+  const account = useAccount();
+  console.log(account);
+  const connectedAddress = account.address;
+  const status = account.status;
+  console.log("Connected Address:", connectedAddress);
   const [queryAddress, setQueryAddress] = useState<string>("");
 
   // Read total clicks
@@ -61,7 +66,13 @@ const Home: NextPage = () => {
 
           <div className="flex justify-center items-center space-x-2 flex-col">
             <p className="my-2 font-medium">Connected Address:</p>
-            <Address address={connectedAddress} />
+            {status === "connecting" || status === "reconnecting" ? (
+              <Address />
+            ) : status === "disconnected" ? (
+              <span>No wallet connected</span>
+            ) : (
+              <Address address={connectedAddress} />
+            )}
 
             {/* Click Button */}
             <Button onClick={handleClick} disabled={!connectedAddress || isClicking} className="mt-4">
