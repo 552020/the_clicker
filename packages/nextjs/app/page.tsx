@@ -1,6 +1,7 @@
 "use client";
 
 // import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PlusButton } from "../components/PlusButton";
 // import Link from "next/link";
 // import { EthereumCssLogo } from "../components/EthereumCssLogo";
@@ -18,7 +19,7 @@ const Home: NextPage = () => {
   console.log(account);
   const connectedAddress = account.address;
   // const status = account.status;
-  // const [queryAddress, setQueryAddress] = useState<string>("");
+  const [queryAddress, setQueryAddress] = useState<string>("");
 
   // Read total clicks
   const { data: totalClicks } = useScaffoldReadContract({
@@ -33,20 +34,30 @@ const Home: NextPage = () => {
     args: [connectedAddress],
   });
 
-  // const { data: queriedClicks } = useScaffoldReadContract({
-  //   contractName: "TheClicker",
-  //   functionName: "getUserClicks",
-  //   args: [queryAddress as `0x${string}`],
-  // });
+  // Query clicks for any address
+  const validQueryAddress = queryAddress && queryAddress.length === 42 ? queryAddress : undefined;
+  const { data: queriedClicks } = useScaffoldReadContract({
+    contractName: "TheClicker",
+    functionName: "getUserClicks",
+    args: [validQueryAddress as `0x${string}` | undefined],
+  });
+
+  // Log the address used for reading (userClicks)
+  useEffect(() => {
+    if (connectedAddress) {
+      console.log("[Frontend] Reading clicks for address:", connectedAddress);
+    }
+  }, [connectedAddress]);
 
   // Write contract for clicking
   const { writeContractAsync: clickAsync, isMining: isClicking } = useScaffoldWriteContract({
     contractName: "TheClicker",
   });
 
+  // Log the address used for writing (click)
   const handleClick = async () => {
     if (!connectedAddress) return;
-
+    console.log("[Frontend] Writing (click) from address:", connectedAddress);
     try {
       await clickAsync({
         functionName: "click",
@@ -90,6 +101,19 @@ const Home: NextPage = () => {
               <div className="border border-orange-500 w-full text-center text-2xl text-gray-400">—</div>
             </div>
           </div>
+        </div>
+        <div className="mt-4">
+          <label>
+            Query Clicks for Address:{" "}
+            <input
+              type="text"
+              value={queryAddress}
+              onChange={e => setQueryAddress(e.target.value)}
+              placeholder="0x..."
+              className="input input-bordered"
+            />
+          </label>
+          {queryAddress && <div>Clicks: {queriedClicks?.toString() ?? "—"}</div>}
         </div>
       </div>
     </>

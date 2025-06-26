@@ -12,7 +12,7 @@ import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
 import { useTheme } from "next-themes";
 import { Toaster } from "react-hot-toast";
 // <-- Import PrivyProvider
-import { mainnet, sepolia } from "viem/chains";
+import { hardhat, mainnet, sepolia } from "viem/chains";
 // <-- Import supported chains
 import { http } from "wagmi";
 // <-- Import http transport
@@ -25,10 +25,11 @@ import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 
 // Complete wagmiConfig for Privy integration
 const wagmiConfig = createConfig({
-  chains: [mainnet, sepolia], // Add all chains your app supports
+  chains: [mainnet, sepolia, hardhat], // Add hardhat for local development
   transports: {
     [mainnet.id]: http(process.env.NEXT_PUBLIC_MAINNET_RPC_URL || undefined),
     [sepolia.id]: http(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || undefined),
+    [hardhat.id]: http("http://localhost:8545"), // <-- Local Hardhat RPC
     // Add more chains as needed
   },
 });
@@ -69,10 +70,21 @@ export const ScaffoldEthAppWithProviders = ({ children }: { children: React.Reac
     <PrivyProvider
       appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
       config={{
+        loginMethods: [
+          "email", // Email login
+          "wallet", // Wallet login (MetaMask, WalletConnect, etc.)
+          "google", // Google login
+          // "discord", // Example: Discord login
+          // "apple",   // Example: Apple login
+          // Add more as needed: 'github', 'twitter', etc.
+        ],
         embeddedWallets: {
           ethereum: { createOnLogin: "users-without-wallets" },
         },
-        // Optionally: defaultChain, supportedChains, appearance, etc.
+        // Ensure Privy defaults to Hardhat for local dev and matches wagmiConfig
+        defaultChain: hardhat, // <-- Set Hardhat as default for local development
+        supportedChains: [mainnet, sepolia, hardhat], // <-- Explicitly list supported chains
+        // ...other config (appearance, etc.)
       }}
     >
       <QueryClientProvider client={queryClient}>

@@ -125,9 +125,151 @@ NEXT_PUBLIC_SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY
 - These RPC URLs are used by wagmi to read blockchain data and send transactions when using embedded wallets or Privy-managed connections.
 - Without valid RPC URLs configured in wagmi, your application wouldn't be able to perform on-chain actions or fetch blockchain data, even with Privy managing the wallets.
 
+## 4b. Add Hardhat Chain to wagmiConfig
+
+> **Notice for Local Development:**
+>
+> If you use Hardhat for local development, you **must** add the Hardhat chain to your `wagmiConfig` and set its transport to `http://localhost:8545`:
+>
+> ```tsx
+> import { mainnet, sepolia, hardhat } from "viem/chains";
+> import { http } from "wagmi";
+>
+> const wagmiConfig = createConfig({
+>   chains: [mainnet, sepolia, hardhat],
+>   transports: {
+>     [mainnet.id]: http(process.env.NEXT_PUBLIC_MAINNET_RPC_URL || undefined),
+>     [sepolia.id]: http(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || undefined),
+>     [hardhat.id]: http("http://localhost:8545"),
+>   },
+> });
+> ```
+>
+> This is required to avoid `ChainNotConfiguredError` when running your app locally with Hardhat.
+
+## 4c. Enable Social Logins (e.g., Google)
+
+To offer Google (and other social logins) in the Privy modal, add a `loginMethods` array to your PrivyProvider config. For example:
+
+```tsx
+<PrivyProvider
+  appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
+  config={{
+    loginMethods: [
+      "email", // Email login
+      "wallet", // Wallet login (MetaMask, WalletConnect, etc.)
+      "google", // Google login
+      // "discord", // Example: Discord login
+      // "apple",   // Example: Apple login
+      // Add more as needed: 'github', 'twitter', etc.
+    ],
+    embeddedWallets: {
+      ethereum: { createOnLogin: "users-without-wallets" },
+    },
+    // Optionally: defaultChain, supportedChains, appearance, etc.
+  }}
+>
+  {/* ... */}
+</PrivyProvider>
+```
+
+> **Important:**
+> Enabling a social login method (like Google) in your PrivyProvider config is **not enough**. You must also enable it in your [Privy Dashboard](https://dashboard.privy.io/) for your app. For some providers (such as Google in production, Apple, etc.), you may need to provide additional credentials (e.g., Google Client ID/Secret from the Google Cloud Console). If not enabled in the dashboard, you will see errors like `Login with Google not allowed` or HTTP 403 errors from Privy.
+
+- You can add or remove login methods as needed. See the [Privy docs](https://docs.privy.io/basics/authentication/login-methods) for the full list and any provider-specific setup.
+- For some providers (like Apple or custom Google Cloud credentials), you may need to configure them in the Privy Dashboard.
+
+> **Important for Local Development:**
+>
+> When developing locally with Hardhat, you must set both `defaultChain` and `supportedChains` in your PrivyProvider config. If you do not, Privy will default to Ethereum mainnet, which can cause network mismatch errors and prompt users to switch networks. This is especially important for embedded wallets and seamless local testing.
+>
+> **Example:**
+>
+> ```tsx
+> import { hardhat, mainnet, sepolia } from "viem/chains";
+>
+> <PrivyProvider
+>   appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
+>   config={{
+>     // ...
+>     defaultChain: hardhat, // Set Hardhat as default for local dev
+>     supportedChains: [mainnet, sepolia, hardhat], // Explicitly list supported chains
+>     // ...
+>   }}
+> >
+>   {/* ... */}
+> </PrivyProvider>;
+> ```
+>
+> This ensures Privy and wagmi are always in sync and prevents "wrong network" errors when using embedded wallets or social logins during local development.
+
+## 4c. Add Hardhat Chain to wagmiConfig
+
+> **Notice for Local Development:**
+>
+> If you use Hardhat for local development, you **must** add the Hardhat chain to your `wagmiConfig` and set its transport to `http://localhost:8545`:
+>
+> ```tsx
+> import { mainnet, sepolia, hardhat } from "viem/chains";
+> import { http } from "wagmi";
+>
+> const wagmiConfig = createConfig({
+>   chains: [mainnet, sepolia, hardhat],
+>   transports: {
+>     [mainnet.id]: http(process.env.NEXT_PUBLIC_MAINNET_RPC_URL || undefined),
+>     [sepolia.id]: http(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || undefined),
+>     [hardhat.id]: http("http://localhost:8545"),
+>   },
+> });
+> ```
+>
+> This is required to avoid `ChainNotConfiguredError` when running your app locally with Hardhat.
+
+## 4c. Enable Social Logins (e.g., Google)
+
+To offer Google (and other social logins) in the Privy modal, add a `loginMethods` array to your PrivyProvider config. For example:
+
+```tsx
+<PrivyProvider
+  appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID || ""}
+  config={{
+    loginMethods: [
+      "email", // Email login
+      "wallet", // Wallet login (MetaMask, WalletConnect, etc.)
+      "google", // Google login
+      // "discord", // Example: Discord login
+      // "apple",   // Example: Apple login
+      // Add more as needed: 'github', 'twitter', etc.
+    ],
+    embeddedWallets: {
+      ethereum: { createOnLogin: "users-without-wallets" },
+    },
+    // Optionally: defaultChain, supportedChains, appearance, etc.
+  }}
+>
+  {/* ... */}
+</PrivyProvider>
+```
+
+> **Important:**
+> Enabling a social login method (like Google) in your PrivyProvider config is **not enough**. You must also enable it in your [Privy Dashboard](https://dashboard.privy.io/) for your app. For some providers (such as Google in production, Apple, etc.), you may need to provide additional credentials (e.g., Google Client ID/Secret from the Google Cloud Console). If not enabled in the dashboard, you will see errors like `Login with Google not allowed` or HTTP 403 errors from Privy.
+
+- You can add or remove login methods as needed. See the [Privy docs](https://docs.privy.io/basics/authentication/login-methods) for the full list and any provider-specific setup.
+- For some providers (like Apple or custom Google Cloud credentials), you may need to configure them in the Privy Dashboard.
+
+---
+
+## TODO
+
+- Consider extracting the PrivyProvider (and possibly the full provider tree) into its own component (e.g., `Providers.tsx`) for clarity and maintainability, especially as your config grows more complex.
+
+---
+
 ## 5. Add Login Button
 
-Use the `usePrivy` hook to trigger login. Always check `ready` before showing login or wallet-dependent UI.
+You can use the `usePrivy` hook to trigger login and manage authentication state. Below is a simple example, but you may want to use a more advanced Login component that handles additional states, user info, or custom UI.
+
+**Simple Example:**
 
 ```tsx
 import { usePrivy } from "@privy-io/react-auth";
@@ -142,6 +284,42 @@ return (
   </button>
 );
 ```
+
+**Advanced Example (as used in your app):**
+
+```tsx
+import { usePrivy } from "@privy-io/react-auth";
+
+export const PrivyLoginButton = () => {
+  const { login, ready, authenticated, user, logout } = usePrivy();
+
+  if (!ready)
+    return (
+      <button className="btn btn-primary btn-sm" disabled>
+        Loading...
+      </button>
+    );
+  if (authenticated) {
+    return (
+      <div>
+        <span>Welcome, {user?.email || user?.wallet?.address?.slice(0, 6) + "..."}</span>
+        <button className="btn btn-secondary btn-sm" onClick={logout}>
+          Logout (Privy)
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <button className="btn btn-primary btn-sm" onClick={login} disabled={!ready}>
+      Log in with Privy
+    </button>
+  );
+};
+```
+
+- This advanced version shows a loading state, a personalized welcome message when authenticated, and a logout button.
+- You can further customize it to show user details, handle errors, or style it according to your app's design.
 
 ## 6. Access Wallets and User Info
 
@@ -254,3 +432,5 @@ Strive for a unified user identity managed by Privy. If RainbowKit is used, link
 **Simplicity and clarity should always be prioritized in the UX.**
 
 ---
+
+an
