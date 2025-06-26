@@ -61,6 +61,70 @@ export default function Providers({ children }: { children: React.ReactNode }) {
 - **Provider order matters:** `PrivyProvider > QueryClientProvider > WagmiProvider`
 - **Config prop:** Use for embedded wallets, network config, appearance, etc. See [PrivyProvider config docs](https://docs.privy.io/basics/react/setup).
 
+## 4a. Configure wagmi for Privy
+
+You must provide a complete wagmi configuration to `createConfig` from `@privy-io/wagmi`. This is required for wallet connections and contract interactions to work correctly with Privy. The configuration should specify:
+
+- `chains`: An array of chain objects (e.g., mainnet, sepolia, polygon) that your dApp will support. Import these from `viem/chains`.
+- `transports`: An object mapping each chain ID to a transport, typically using `http()` from `wagmi`. For production, use your own RPC URLs via environment variables.
+
+**Example:**
+
+```tsx
+import { createConfig } from "@privy-io/wagmi";
+import { mainnet, sepolia } from "viem/chains"; // Import your supported chains
+import { http } from "wagmi"; // Import the http transport
+
+const wagmiConfig = createConfig({
+  chains: [mainnet, sepolia], // Add all chains your app supports
+  transports: {
+    [mainnet.id]: http(process.env.NEXT_PUBLIC_MAINNET_RPC_URL || undefined),
+    [sepolia.id]: http(process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL || undefined),
+    // Add more chains as needed
+  },
+});
+```
+
+**Key points:**
+
+- The `chains` defined in `wagmiConfig` should match the `supportedChains` (and `defaultChain`) you might set in your `PrivyProvider` config for consistency.
+- Use `createConfig` and `WagmiProvider` from `@privy-io/wagmi`, not from `wagmi` directly. This is crucial for Privy to correctly manage wallet states for wagmi.
+- Use environment variables for your RPC URLs and prefix them with `NEXT_PUBLIC_` for client-side access in Next.js.
+- Install `viem` if you haven't already: `yarn add viem` or `npm install viem`.
+
+**References:**
+
+- [Integrating with wagmi (Privy Docs)](https://docs.privy.io/wallets/connectors/ethereum/integrations/wagmi)
+
+> If you are migrating from Scaffold-ETH 2, you can adapt your previous wagmi config logic to this format, ensuring you use the same chains and client logic for compatibility.
+
+## 4b. Add RPC URLs for Supported Chains
+
+With embedded wallets (such as those created via Privy, social logins, or email), your frontend is responsible for connecting directly to the blockchain via an RPC endpoint. This is different from using MetaMask or other browser wallets, where the extension manages the network connection for you.
+
+**Does Privy provide a direct connection to an RPC?**
+
+No, Privy itself does **not** act as an RPC provider like Infura, Alchemy, or public node providers.
+
+- **Privy's Role:** Privy specializes in user authentication, creating and managing user wallets (especially embedded wallets), and providing the tools (like the PrivyProvider and hooks) to integrate these wallets into your application. It gives your app the ability to sign messages and transactions using the user's wallet.
+- **Developer's Role (RPCs):** You, as the developer, are responsible for supplying the RPC endpoints that libraries like wagmi or ethers.js will use to broadcast those signed transactions or query blockchain data. Privy ensures the "who" (the user's wallet and identity) and the "what" (the signed transaction/message), while your configured RPC endpoint handles the "how" of communicating with the actual blockchain network.
+
+You must provide RPC URLs for each supported chain in your wagmi config. Add these to your `packages/nextjs/.env.local` file:
+
+```
+NEXT_PUBLIC_MAINNET_RPC_URL=https://mainnet.infura.io/v3/YOUR_INFURA_KEY
+NEXT_PUBLIC_SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_KEY
+```
+
+- Replace `YOUR_INFURA_KEY` with your actual Infura (or Alchemy, or other provider) API key.
+- You can use any public or private RPC provider, but for production, a reliable provider is recommended.
+
+**Why?**
+
+- With embedded wallets and Privy, your frontend is responsible for connecting to the blockchain, not just the user's wallet extension.
+- These RPC URLs are used by wagmi to read blockchain data and send transactions when using embedded wallets or Privy-managed connections.
+- Without valid RPC URLs configured in wagmi, your application wouldn't be able to perform on-chain actions or fetch blockchain data, even with Privy managing the wallets.
+
 ## 5. Add Login Button
 
 Use the `usePrivy` hook to trigger login. Always check `ready` before showing login or wallet-dependent UI.
