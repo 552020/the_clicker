@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { usePrivy } from "@privy-io/react-auth";
 import { hardhat } from "viem/chains";
 import { Bars3Icon, BugAntIcon, HomeIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import { FaucetButton, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
@@ -59,6 +60,30 @@ export const HeaderMenuLinks = () => {
   );
 };
 
+// Simple Privy login button component
+const PrivyLoginButton = () => {
+  const { login, ready, authenticated, logout } = usePrivy();
+
+  if (!ready)
+    return (
+      <button className="btn btn-primary btn-sm" disabled>
+        Loading...
+      </button>
+    );
+  if (authenticated)
+    return (
+      <button className="btn btn-secondary btn-sm" onClick={logout}>
+        Logout (Privy)
+      </button>
+    );
+
+  return (
+    <button className="btn btn-primary btn-sm" onClick={login} disabled={!ready}>
+      Log in with Privy
+    </button>
+  );
+};
+
 /**
  * Site header
  */
@@ -102,6 +127,7 @@ export const Header = () => {
         </ul>
       </div>
       <div className="navbar-end grow mr-4">
+        <PrivyLoginButton />
         <RainbowKitCustomConnectButton />
         {isLocalNetwork && <FaucetButton />}
       </div>
